@@ -1,0 +1,7 @@
+<ol *ngIf="crumbs.length" class="ngn-breadcrumb" [ngClass]="crumbs[0].parentClass">
+  <li *ngFor="let crumb of crumbs; let last = last" [ngClass]="{ 'active': last }" class="breadcrumb-item">
+    <a *ngIf="!last && !crumb.static" [routerLink]="crumb.path">{{ crumb.text }}</a>
+    <span *ngIf="!last && crumb.static">{{ crumb.text }}</span>
+    <span *ngIf="last">{{ crumb.text }}</span>
+  </li>
+</ol>
