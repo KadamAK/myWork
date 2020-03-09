@@ -1,0 +1,29 @@
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
+import { LowerCasePipe } from '@angular/common';
+@Pipe({
+    name: 'numberFormatPipe'
+})
+
+@Injectable()
+export class NumberFormatPipe implements PipeTransform {
+    transform(item) {
+        if (!item && item != "0") return [];
+
+        var SI_POSTFIXES = ["", "k", "M", "B", "T", "P", "E"];
+        let number = item;
+        var tier = Math.log10(Math.abs(number)) / 3 | 0;
+        if (tier == 0) {
+            var multiplier = Math.pow(10, 1),
+                adjustedNum = number * multiplier,
+                truncatedNum = Math[adjustedNum < 0 ? 'ceil' : 'floor'](adjustedNum);
+            return truncatedNum / multiplier;
+        }
+        var postfix = SI_POSTFIXES[tier];
+        var scale = Math.pow(10, tier * 3);
+        var scaled = number / scale;
+        var formatted = scaled.toFixed(1) + '';
+        if (/\.0$/.test(formatted))
+            formatted = formatted.substr(0, formatted.length - 2);
+        return formatted + postfix;
+    }
+}
